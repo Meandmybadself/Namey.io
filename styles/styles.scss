@@ -19,6 +19,7 @@ html,body {
     position:relative;
     display:none;
     margin:0;
+
     &.active {
         display:block;
     }
@@ -84,8 +85,9 @@ html,body {
     }
     &.name {
         position:relative;
-        display:table;
-
+        &.active {
+            display:table;
+        }
         .name-container {
             position:relative;
             height:100%;

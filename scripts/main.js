@@ -224,7 +224,7 @@ $(function() {
 
         location.hash = '';
     } else {
-
+        $('.login').show();
         $('#create').submit(function(e) {
             //stop being a form, form.
             e.preventDefault();

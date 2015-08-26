@@ -68,8 +68,9 @@ html, body {
     display: block;
     height: 100%; }
   .section.name {
-    position: relative;
-    display: table; }
+    position: relative; }
+    .section.name.active {
+      display: table; }
     .section.name .name-container {
       position: relative;
       height: 100%;
