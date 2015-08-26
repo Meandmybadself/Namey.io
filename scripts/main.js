@@ -104,7 +104,7 @@ function closeShowMatches() {
 }
 
 function updateCount(data) {
-    console.log('updateCount');
+    console.log('updateCount', data);
     if (data.matches) {
         if (!$('#matchCountContainer').hasClass('active')) {
             $('#matchCountContainer').addClass("active");
@@ -117,6 +117,24 @@ function updateCount(data) {
         }
         $('#matchCount').text(t);
 
+    }
+
+    console.log('getUser', getUser());
+    switch(getUser()) {
+        case '0':
+            $('#footer').text("You've liked " + data.u0 + " names, they've liked " + data.u1 + ".");
+        break;
+        case '1':
+            $('#footer').text("You've liked " + data.u1 + " names, they've liked " + data.u0 + ".");
+        break;
+    }
+
+}
+
+function getUser() {
+    if (window.uid) {
+        var uidArr = uid.split('-');
+        return uidArr[3];
     }
 }
 
@@ -136,8 +154,6 @@ function setUser(uid) {
    // }
 
    window.uid = uid;
-
-
 
     //Do we have the uid in ls?
     var d = localStorage.getItem(uid);
