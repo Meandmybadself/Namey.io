@@ -37,6 +37,28 @@
 
         echo json_encode(array('matches'=>$matches));
 
+    } elseif(isset($_POST['uid'], $_POST['list'])) {
+        //just return the number of matches for the user.
+        $uid        = strtolower(trim($_POST['uid']));
+        $uidArr     = explode("-", $uid);
+        $user       = array_pop($uidArr);
+        $uid        = implode("-", $uidArr);
+
+        $filename   = 'users/' . $uid;
+
+        $matchingNames  = array();
+
+        if (is_file($filename)) {
+            $data = unserialize(file_get_contents($filename));
+
+            foreach($data as $name=>$usermatches) {
+                if (isset($usermatches[0], $usermatches[1])) {
+                    $matchingNames[] = $name;
+                }
+            }
+        }
+
+        echo json_encode($matchingNames);
     } elseif(isset($_POST['uid'])) {
         //just return the number of matches for the user.
         $uid        = strtolower(trim($_POST['uid']));

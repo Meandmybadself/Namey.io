@@ -34,6 +34,8 @@
     <meta http-equiv="x-rim-auto-match" content="none" />
 
     <!-- css //-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cloud.typography.com/6984932/704806/css/fonts.css" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles/styles.css" media="screen, print" rel="stylesheet" type="text/css"  />
 
@@ -42,13 +44,12 @@
 <body>
     <div id='main' class='container-fluid'>
         <div class='row section login'>
-            <div class='col-xs-offset-2 col-xs-8'>
+            <div class='col-xs-offset-1 col-xs-10 text-center'>
                 <h1 class='text-center'>Rose</h1>
                 <p class='text-center'>Find a name you both agree on.</p>
-                <hr/>
                 <form id='create'>
                   <div class="form-group">
-                    <input type="email" class="form-control input-lg" id="email" placeholder="Co-parent's email" value="meandmybadself@gmail.com">
+                    <input type="email" class="form-control input-lg" id="email" placeholder="Enter co-parent's email" value="">
                   </div>
                   <p><b>Show us:</b></p>
                   <div class="radio">
@@ -69,16 +70,28 @@
                       boy names.
                     </label>
                   </div>
-                  <hr/>
                   <button type="submit" id='createUser' class="btn btn-success btn-lg">Find a name</button>
                 </form>
             </div>
         </div>
         <div class='row section name'>
-            <div class='col-xs-12 name-container'>
+            <div class='col-xs-12 content'>
                 <h1 id='name'></h1>
-                <div id='matchCountContainer'>
-                    <div id='matchCount'></div>
+                <hr/>
+                <p>Swipe left if you don't like or right if you do.</p>
+                <p>You'll be notified when a match is found.</p>
+                <hr/>
+                <div class='circle' id='matchCountContainer'>
+                    <div class='value' id='matchCount'>0 Matches</div>
+                </div>
+            </div>
+        </div>
+        <div class='row section matchesList'>
+            <div class='col-xs-12 content'>
+                <h2>Names you both have chosen</h2>
+                <ul id='matches'></ul>
+                <div id='close-matches' class='circle close-btn'>
+                    <div class='value'>X</div>
                 </div>
             </div>
         </div>
@@ -88,171 +101,7 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenMax.min.js"></script>
     <script type="text/javascript" src="scripts/hashids.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js"></script>
-    <script type="text/javascript">
-
-        function createUser(email, gender) {
-            $('#createUser').addClass('disabled');
-            //create a uid.
-            var h   = new Hashids("Cock. Balls. http://www.imdb.com/title/tt0302886/");
-            var int = Math.floor(Math.random() * 1000000);
-            //uid-email-gender-user
-            var uid = h.encode(int) + '-' + email + '-' + gender + '-0';
-            window.uid = uid;
-            //send an email to the co-parent.
-            $.post("create/",
-                {'uid':uid, 'email':$('#email').val()},
-                onUserCreated,
-                "json"
-                ).error(onError);
-        }
-
-        function onError() {
-            console.log('onError', arguments);
-            alert("Something's broken.");
-           // alert('duh...');
-        }
-
-        function onUserCreated() {
-            console.log('onUserCreated');
-            setUser(window.uid);
-        }
-
-        function onSwipe() {
-            console.log('onSwipe', window.currentName);
-        }
-        function onTap(e) {
-            //console.log('onTap', window.currentName, arguments);
-            var x = e.pointers[0].pageX;
-            var swh = window.innerWidth / 2;
-            if (x > -1 && x < swh) {
-                swipeLeft();
-            } else {
-                swipeRight();
-            }
-        }
-
-        function swipeRight() {
-            console.log('swipeRight');
-            $.post("vote/",
-                {'uid':window.uid, 'name':window.currentName, 'user':window.currentUser},
-                updateCount,
-                "json"
-            ).error(onError);
-
-            showNextName();
-        }
-
-        function updateCount(data) {
-            console.log('updateCount', data.matches);
-            if (data.matches) {
-                $('#matchCount').text(data.matches);
-                $('#matchCountContainer').addClass("active");
-
-            }
-        }
-
-        function swipeLeft() {
-            showNextName();
-        }
-
-        function setUser(uid) {
-            $('.login').hide();
-
-            //Set up Hammer.
-            window.h = new Hammer(document.getElementById('main'));
-            window.h.get('swipe').set({direction:Hammer.DIRECTION_HORIZONTAL});
-            window.h.on('swipe', onSwipe);
-            window.h.on('tap', onTap);
-
-            //Do we have the uid in ls?
-            var d = localStorage.getItem(uid);
-            if (d) {
-                //yep.
-                //parse & keep playing.
-                showNextName();
-
-            } else {
-
-                //nope.
-                window.uid      = uid;
-
-                //parse deets.
-                var uidParts    = uid.split("-");
-                window.user     = uidParts.pop();
-                window.gender   = uidParts.pop();
-
-                localStorage.setItem("id", uid);
-                localStorage.setItem("user", window.user);
-                //load gender data.
-                $.getJSON("data/" + gender + ".json").success(onNamesLoaded);
-            }
-        }
-
-        function onNamesLoaded(data,status) {
-            //console.log('onNamesLoaded');
-            //Shuffle it up.
-            var names = shuffle(data);
-            //Stow that shit away in ls.
-            localStorage.setItem(window.uid, JSON.stringify(names));
-
-            //Get this party started.
-            showNextName();
-        }
-
-        function showNextName() {
-            var names = $.parseJSON(localStorage.getItem(window.uid));
-
-            if (names && names.length) {
-                var name = names.pop();
-                window.currentName = name;
-                localStorage.setItem(window.uid,JSON.stringify(names));
-
-                $('.section.name').show();
-                $('#name').text(window.currentName);
-            }
-        }
-
-        function shuffle(array) {
-          var currentIndex = array.length, temporaryValue, randomIndex ;
-
-          // While there remain elements to shuffle...
-          while (0 !== currentIndex) {
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-          }
-
-          return array;
-        }
-
-        $(function() {
-            //Do we have stored data?
-            var id = localStorage.getItem("id");
-            var user = localStorage.getItem("user");
-            if (id && user) {
-                window.uid = id;
-                window.user = user;
-                setUser(id);
-            } else {
-
-                $('#create').submit(function(e) {
-                    //stop being a form, form.
-                    e.preventDefault();
-
-                    //Yank values from form.
-                    var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
-                    createUser(email, gender);
-                });
-
-                $('#email').focus();
-            }
-        });
-    </script>
+    <script type="text/javascript" src="scripts/main.js"></script>
 
 </body>
 </html>

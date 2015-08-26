@@ -10,10 +10,10 @@
         $email  = $_POST['email'];
 
         $interactionURL = "http://" . $_SERVER['HTTP_HOST'] . "/#/uid/" . $uid;
-        $msg = "Go visit $interactionURL";
+        $msg = "Find a name for your baby at:\n$interactionURL";
 
         //header("Content-type:application/javascript");
-        if (mail($email, "Rose start", $msg)) {
+        if (mail($email, "Find a baby name.", $msg)) {
             echo json_encode(array("stat"=>"ok"), JSON_PRETTY_PRINT);
         } else {
             echo json_encode(array("stat"=>"err"), JSON_PRETTY_PRINT);
