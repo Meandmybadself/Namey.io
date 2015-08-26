@@ -25,12 +25,7 @@ function onUserCreated() {
     setUser(window.uid);
 }
 
-function onSwipe() {
-    if ($('matchesList').hasClass('active')) {
-        return;
-    }
-    console.log('onSwipe', window.currentName);
-}
+
 function onTap(e) {
     if ($('matchesList').hasClass('active')) {
         return;
@@ -104,7 +99,6 @@ function closeShowMatches() {
 }
 
 function updateCount(data) {
-    console.log('updateCount', data);
     if (data.matches) {
         if (!$('#matchCountContainer').hasClass('active')) {
             $('#matchCountContainer').addClass("active");
@@ -116,10 +110,8 @@ function updateCount(data) {
             var t = data.matches + " matches";
         }
         $('#matchCount').text(t);
+     }
 
-    }
-
-    console.log('getUser', getUser());
     switch(getUser()) {
         case '0':
             $('#footer').text("You've liked " + data.u0 + " names, they've liked " + data.u1 + ".");
@@ -153,7 +145,7 @@ function setUser(uid) {
         window.h.on('tap', onTap);
    // }
 
-   window.uid = uid;
+    window.uid = uid;
 
     //Do we have the uid in ls?
     var d = localStorage.getItem(uid);
@@ -180,7 +172,6 @@ function setUser(uid) {
 }
 
 function onNamesLoaded(data,status) {
-    //console.log('onNamesLoaded');
     //Shuffle it up upon initial load.
     var names = shuffle(data);
     //Stow that shit away in ls.
@@ -228,8 +219,6 @@ $(function() {
     //Do we have stored data?
     var id  = localStorage.getItem("id"),
     hash    = location.hash;
-
-    console.log(id,hash);
 
     if (id) {
         window.uid = id;

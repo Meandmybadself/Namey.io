@@ -52,7 +52,17 @@ html,body {
     }
 
     .circle {
-        //border:2px solid #FFF;
+        &:before {
+            content:" ";
+            position:absolute;
+            z-index:-1;
+            top:-10px;
+            left:-10px;
+            right:-10px;
+            bottom:-10px;
+            border:1px solid #FF0000;
+            background:#00FF00;
+        }
         display:table;
         width:100px;
         height:100px;

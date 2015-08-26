@@ -16,7 +16,7 @@
                 $name   = $data[0];
                 $gender = $data[1];
                 $count  = $data[2];
-                if ($count > 100) {
+                if ($count > 150) {
                     //Only allow in a certain amount.
                     $allNames[$name] = 1;
                     $structNames[$gender][$name] = 1;
