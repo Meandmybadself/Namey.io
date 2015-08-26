@@ -40,7 +40,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
   </head>
 <body>
-    <div class='container-fluid'>
+    <div id='main' class='container-fluid'>
         <div class='row section login'>
             <div class='col-xs-offset-2 col-xs-8'>
                 <h1 class='text-center'>Rose</h1>
@@ -70,8 +70,14 @@
                     </label>
                   </div>
                   <hr/>
-                  <button type="submit" class="btn btn-success btn-lg">Find a name</button>
+                  <button type="submit" id='createUser' class="btn btn-success btn-lg">Find a name</button>
                 </form>
+            </div>
+        </div>
+        <div class='row section name'>
+            <div class='col-xs-12 name-container'>
+                <h1 id='name'></h1>
+                <div id='matchCount'></div>
             </div>
         </div>
     </div>
@@ -83,12 +89,18 @@
     <script type="text/javascript">
 
         function createUser(email, gender) {
+            $('#createUser').addClass('disabled');
             //create a uid.
             var h   = new Hashids("Cock. Balls. http://www.imdb.com/title/tt0302886/");
             var int = Math.floor(Math.random() * 1000000);
-            var uid = h.encode(int) + '-' + email + '-' + gender;
+            //uid-email-gender-user
+            var uid = h.encode(int) + '-' + email + '-' + gender + '-0';
             //send an email to the co-parent.
             //$.post("/create/", {'id':uid, 'email':$('#email').val()}).success(onUserCreated);
+
+            //Move this into onUserCreated –
+            $('.login').hide();
+
             setUser(uid);
         }
 
@@ -100,36 +112,90 @@
             //location.href = '/#/';
             //setUser()
 
+        }
 
+        function onSwipe() {
+            console.log('onSwipe', window.currentName);
+        }
+        function onTap(e) {
+            //console.log('onTap', window.currentName, arguments);
+            var x = e.pointers[0].pageX;
+            var swh = window.innerWidth / 2;
+            if (x > -1 && x < swh) {
+                swipeLeft();
+            } else {
+                swipeRight();
+            }
+        }
+
+        function swipeRight() {
+            $.post("vote/", {'uid':window.uid, 'name':window.currentName, 'user':window.currentUser}).success(updateCount);
+        }
+
+        function updateCount() {
+            console.log('updateCount', arguments);
+        }
+
+        function swipeLeft() {
+            console.log('swipeLeft');
+            showNextName();
         }
 
         function setUser(uid) {
+            $('.login').hide();
+
+            //Set up Hammer.
+            window.h = new Hammer(document.getElementById('main'));
+            window.h.get('swipe').set({direction:Hammer.DIRECTION_HORIZONTAL});
+            window.h.on('swipe', onSwipe);
+            window.h.on('tap', onTap);
+
             //Do we have the uid in ls?
             var d = localStorage.getItem(uid);
             if (d) {
                 //yep.
                 //parse & keep playing.
+                showNextName();
 
             } else {
-                //nope.
-                //parse deets.
-                var uidParts = uid.split("-"),
-                gender = uidParts.pop();
 
-                window.uid = uid;
+                //nope.
+                window.uid      = uid;
+
+                //parse deets.
+                var uidParts    = uid.split("-");
+                window.user     = uidParts.pop();
+                window.gender   = uidParts.pop();
+
+                localStorage.setItem("id", uid);
+                localStorage.setItem("user", window.user);
                 //load gender data.
                 $.getJSON("data/" + gender + ".json").success(onNamesLoaded);
             }
         }
 
         function onNamesLoaded(data,status) {
-            console.log('onNamesLoaded');
+            //console.log('onNamesLoaded');
             //Shuffle it up.
             var names = shuffle(data);
             //Stow that shit away in ls.
             localStorage.setItem(window.uid, JSON.stringify(names));
 
             //Get this party started.
+            showNextName();
+        }
+
+        function showNextName() {
+            var names = $.parseJSON(localStorage.getItem(window.uid));
+
+            if (names && names.length) {
+                var name = names.pop();
+                window.currentName = name;
+                localStorage.setItem(window.uid,JSON.stringify(names));
+
+                $('.section.name').show();
+                $('#name').text(window.currentName);
+            }
         }
 
         function shuffle(array) {
@@ -154,8 +220,11 @@
         $(function() {
             //Do we have stored data?
             var id = localStorage.getItem("id");
-            if (id) {
-                alert("No id.");
+            var user = localStorage.getItem("user");
+            if (id && user) {
+                window.uid = id;
+                window.user = user;
+                setUser(id);
             } else {
 
                 $('#create').submit(function(e) {
@@ -165,15 +234,10 @@
                     //Yank values from form.
                     var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
                     createUser(email, gender);
-
                 });
 
                 $('#email').focus();
-                //showLogin();
             }
-            //localStorage.setItem("id", "fart");
-            //console.log(localStorage.getItem("id"));
-
         });
     </script>
 
