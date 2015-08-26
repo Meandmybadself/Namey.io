@@ -64,6 +64,18 @@ html, body {
       color: #FFF;
       font-family: "Chronicle Display A", "Chronicle Display B";
       font-style: normal; }
+  .section #footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #333;
+    color: #fff;
+    text-align: center;
+    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-style: normal;
+    padding: 5px;
+    padding-bottom: 20px; }
   .section .content {
     display: block;
     height: 100%; }

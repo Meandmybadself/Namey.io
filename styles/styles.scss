@@ -52,7 +52,7 @@ html,body {
     }
 
     .circle {
-
+        //border:2px solid #FFF;
         display:table;
         width:100px;
         height:100px;
@@ -76,6 +76,21 @@ html,body {
             font-family: "Chronicle Display A", "Chronicle Display B";
             font-style: normal;
         }
+    }
+
+    #footer {
+        position:absolute;
+        bottom:0;
+        left:0;
+        width:100%;
+        background:#333;
+        color:#fff;
+        text-align:center;
+        font-family: "Chronicle Display A", "Chronicle Display B";
+        font-style: normal;
+        padding:5px;
+        padding-bottom:20px
+
     }
 
     .content {
