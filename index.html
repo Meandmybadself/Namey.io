@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="ie ie6" lang="en"><![endif]-->
+<!--[if IE 7]><html class="ie ie7" lang="en"><![endif]-->
+<!--[if IE 8]><html class="ie ie8" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+  <head>
+
+    <title></title>
+
+    <!-- Base meta //-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link type="text/plain" rel="author" href="humans.txt" />
+
+    <!-- social medias //-->
+    <!-- fb -->
+    <meta property="og:url" content="" />
+    <meta property="og:title" content="Home"/>
+    <meta property="og:description" content=""/>
+    <meta property="og:image" content="" />
+
+    <!-- twitter -->
+    <meta name="twitter:card" value="summary" />
+    <meta name="twitter:site" value="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:title" content="Home" />
+    <meta name="twitter:description" content="" />
+    <meta name="twitter:image" content="" />
+
+    <!-- mobile //-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="x-rim-auto-match" content="none" />
+
+    <!-- css //-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/styles.css" media="screen, print" rel="stylesheet" type="text/css"  />
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  </head>
+<body>
+    <div class='container-fluid'>
+        <div class='row section login'>
+            <div class='col-xs-offset-2 col-xs-8'>
+                <h1 class='text-center'>Rose</h1>
+                <p class='text-center'>Find a name you both agree on.</p>
+                <hr/>
+                <form id='create'>
+                  <div class="form-group">
+                    <input type="email" class="form-control input-lg" id="email" placeholder="Co-parent's email" value="aewald@gmail.com">
+                  </div>
+                  <p><b>Show us:</b></p>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="gender" id="gender" value="all" checked>
+                      all names.
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="gender" id="gender" value="f">
+                      girl names.
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="gender" id="gender" value="m">
+                      boy names.
+                    </label>
+                  </div>
+                  <hr/>
+                  <button type="submit" class="btn btn-success btn-lg">Find a name</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenMax.min.js"></script>
+    <script type="text/javascript" src="scripts/hashids.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.4/hammer.min.js"></script>
+    <script type="text/javascript">
+
+        function createUser(email, gender) {
+            //create a uid.
+            var h   = new Hashids("Cock. Balls. http://www.imdb.com/title/tt0302886/");
+            var int = Math.floor(Math.random() * 1000000);
+            var uid = h.encode(int) + '-' + email + '-' + gender;
+            //send an email to the co-parent.
+            //$.post("/create/", {'id':uid, 'email':$('#email').val()}).success(onUserCreated);
+            setUser(uid);
+        }
+
+
+        function onUserCreated() {
+            console.log('onUserCreated', arguments);
+
+            //Redirect to dataset.
+            //location.href = '/#/';
+            //setUser()
+
+
+        }
+
+        function setUser(uid) {
+            //Do we have the uid in ls?
+            var d = localStorage.getItem(uid);
+            if (d) {
+                //yep.
+                //parse & keep playing.
+
+            } else {
+                //nope.
+                //parse deets.
+                var uidParts = uid.split("-"),
+                gender = uidParts.pop();
+
+                window.uid = uid;
+                //load gender data.
+                $.getJSON("data/" + gender + ".json").success(onNamesLoaded);
+            }
+        }
+
+        function onNamesLoaded(data,status) {
+            console.log('onNamesLoaded');
+            //Shuffle it up.
+            var names = shuffle(data);
+            //Stow that shit away in ls.
+            localStorage.setItem(window.uid, JSON.stringify(names));
+
+            //Get this party started.
+        }
+
+        function shuffle(array) {
+          var currentIndex = array.length, temporaryValue, randomIndex ;
+
+          // While there remain elements to shuffle...
+          while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+          }
+
+          return array;
+        }
+
+        $(function() {
+            //Do we have stored data?
+            var id = localStorage.getItem("id");
+            if (id) {
+                alert("No id.");
+            } else {
+
+                $('#create').submit(function(e) {
+                    //stop being a form, form.
+                    e.preventDefault();
+
+                    //Yank values from form.
+                    var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
+                    createUser(email, gender);
+
+                });
+
+                $('#email').focus();
+                //showLogin();
+            }
+            //localStorage.setItem("id", "fart");
+            //console.log(localStorage.getItem("id"));
+
+        });
+    </script>
+
+</body>
+</html>
