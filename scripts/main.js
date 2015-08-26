@@ -229,6 +229,8 @@ $(function() {
     var id  = localStorage.getItem("id"),
     hash    = location.hash;
 
+    console.log(id,hash);
+
     if (id) {
         window.uid = id;
         setUser(id);
