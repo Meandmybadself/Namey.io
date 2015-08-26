@@ -48,7 +48,7 @@
                 <hr/>
                 <form id='create'>
                   <div class="form-group">
-                    <input type="email" class="form-control input-lg" id="email" placeholder="Co-parent's email" value="aewald@gmail.com">
+                    <input type="email" class="form-control input-lg" id="email" placeholder="Co-parent's email" value="meandmybadself@gmail.com">
                   </div>
                   <p><b>Show us:</b></p>
                   <div class="radio">
@@ -77,7 +77,9 @@
         <div class='row section name'>
             <div class='col-xs-12 name-container'>
                 <h1 id='name'></h1>
-                <div id='matchCount'></div>
+                <div id='matchCountContainer'>
+                    <div id='matchCount'></div>
+                </div>
             </div>
         </div>
     </div>
@@ -95,23 +97,24 @@
             var int = Math.floor(Math.random() * 1000000);
             //uid-email-gender-user
             var uid = h.encode(int) + '-' + email + '-' + gender + '-0';
+            window.uid = uid;
             //send an email to the co-parent.
-            //$.post("/create/", {'id':uid, 'email':$('#email').val()}).success(onUserCreated);
-
-            //Move this into onUserCreated –
-            $('.login').hide();
-
-            setUser(uid);
+            $.post("create/",
+                {'uid':uid, 'email':$('#email').val()},
+                onUserCreated,
+                "json"
+                ).error(onError);
         }
 
+        function onError() {
+            console.log('onError', arguments);
+            alert("Something's broken.");
+           // alert('duh...');
+        }
 
         function onUserCreated() {
-            console.log('onUserCreated', arguments);
-
-            //Redirect to dataset.
-            //location.href = '/#/';
-            //setUser()
-
+            console.log('onUserCreated');
+            setUser(window.uid);
         }
 
         function onSwipe() {
@@ -129,15 +132,26 @@
         }
 
         function swipeRight() {
-            $.post("vote/", {'uid':window.uid, 'name':window.currentName, 'user':window.currentUser}).success(updateCount);
+            console.log('swipeRight');
+            $.post("vote/",
+                {'uid':window.uid, 'name':window.currentName, 'user':window.currentUser},
+                updateCount,
+                "json"
+            ).error(onError);
+
+            showNextName();
         }
 
-        function updateCount() {
-            console.log('updateCount', arguments);
+        function updateCount(data) {
+            console.log('updateCount', data.matches);
+            if (data.matches) {
+                $('#matchCount').text(data.matches);
+                $('#matchCountContainer').addClass("active");
+
+            }
         }
 
         function swipeLeft() {
-            console.log('swipeLeft');
             showNextName();
         }
 
@@ -203,7 +217,6 @@
 
           // While there remain elements to shuffle...
           while (0 !== currentIndex) {
-
             // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
             currentIndex -= 1;

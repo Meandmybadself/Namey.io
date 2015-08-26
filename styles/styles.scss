@@ -1,3 +1,58 @@
 html,body {
+    width:100%;
+    height:100%;
+    padding:0;
     margin:0;
+}
+.container-fluid {
+    margin-left:0;
+    margin-right:0;
+    padding-left:0;
+    padding-right:0;
+    height:100%;
+}
+
+.section {
+    width:100%;
+    height:100%;
+
+    &.name {
+        display:table;
+        .name-container {
+            height:100%;
+           // border:1px solid;
+            display:table-cell;
+            text-align:center;
+            vertical-align:middle;
+        }
+        #name {
+            font-size:4em;
+            text-align:center;
+            margin-top:100px;
+        }
+        #matchCountContainer {
+            transition:opacity .3s ease-out, transform .3s ease-out;
+            opacity:0;
+            &.active {
+                opacity:1;
+            }
+            display:table;
+            width:100px;
+            height:100px;
+            //margin:0 auto;
+            background-color:#000;
+            border-radius:50%;
+            position:absolute;
+            bottom:100px;
+            left:50%;
+            margin-left:-50px;
+        }
+        #matchCount {
+            display:table-cell;
+            vertical-align: middle;
+            color:#FFF;
+            font-size:40px;
+            font-weight:bold;
+        }
+    }
 }

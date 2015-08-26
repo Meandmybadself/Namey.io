@@ -1,2 +1,47 @@
 html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
   margin: 0; }
+
+.container-fluid {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  height: 100%; }
+
+.section {
+  width: 100%;
+  height: 100%; }
+  .section.name {
+    display: table; }
+    .section.name .name-container {
+      height: 100%;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle; }
+    .section.name #name {
+      font-size: 4em;
+      text-align: center;
+      margin-top: 100px; }
+    .section.name #matchCountContainer {
+      transition: opacity .3s ease-out, transform .3s ease-out;
+      opacity: 0;
+      display: table;
+      width: 100px;
+      height: 100px;
+      background-color: #000;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      margin-left: -50px; }
+      .section.name #matchCountContainer.active {
+        opacity: 1; }
+    .section.name #matchCount {
+      display: table-cell;
+      vertical-align: middle;
+      color: #FFF;
+      font-size: 40px;
+      font-weight: bold; }
