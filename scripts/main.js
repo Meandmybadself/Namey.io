@@ -204,7 +204,7 @@ function shuffle(array) {
 }
 
 //click handler.
-var ch
+var ch, isLocked;
 
 $(function() {
     ch = $('html').hasClass('touch') ? 'touchstart' : 'click';
@@ -229,9 +229,22 @@ $(function() {
             //stop being a form, form.
             e.preventDefault();
 
-            //Yank values from form.
-            var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
-            createUser(email, gender);
+            if (isLocked) { return false; }
+
+            var email = $.trim($('#email').val());
+
+            if (email && email.indexOf('@') > 0 && email.indexOf('.') > 0) {
+                isLocked = true;
+                //Yank values from form.
+                var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
+                createUser(email, gender);
+            } else {
+                $('.login-email').addClass('has-error');
+                $('#email').focus();
+                return;
+            }
+
+
         });
 
         $('#email').focus();
