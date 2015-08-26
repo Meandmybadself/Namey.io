@@ -23,7 +23,7 @@ html, body {
   .section hr {
     height: 0;
     border-top: 1px solid #fcca91;
-    width: 55%;
+    width: 60%;
     margin-top: 10px;
     margin-bottom: 10px;
     position: relative; }
@@ -43,6 +43,7 @@ html, body {
     font-weight: 300;
     font-size: 1.15em; }
   .section .circle {
+    box-shadow: 0 0 0 2px #888, 0 0 0 8px #333;
     display: table;
     width: 100px;
     height: 100px;
@@ -52,16 +53,6 @@ html, body {
     bottom: 100px;
     left: 50%;
     margin-left: -50px; }
-    .section .circle:before {
-      content: " ";
-      position: absolute;
-      z-index: -1;
-      top: -10px;
-      left: -10px;
-      right: -10px;
-      bottom: -10px;
-      border: 1px solid #FF0000;
-      background: #00FF00; }
     .section .circle.close-btn {
       width: 50px;
       height: 50px;

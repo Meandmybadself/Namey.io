@@ -27,7 +27,7 @@ html,body {
     hr {
         height:0;
         border-top:1px solid lighten(#FAB260, 10);
-        width:55%;
+        width:60%;
         margin-top:10px;
         margin-bottom:10px;
         position:relative;
@@ -52,17 +52,9 @@ html,body {
     }
 
     .circle {
-        &:before {
-            content:" ";
-            position:absolute;
-            z-index:-1;
-            top:-10px;
-            left:-10px;
-            right:-10px;
-            bottom:-10px;
-            border:1px solid #FF0000;
-            background:#00FF00;
-        }
+        box-shadow:
+        0 0 0 2px #888,
+        0 0 0 8px #333;
         display:table;
         width:100px;
         height:100px;
