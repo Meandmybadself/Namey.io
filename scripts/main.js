@@ -68,10 +68,8 @@ function swipeLeft(e) {
 
     x = "-=" + offset + "px";
 
-    var d = .2;
-
-    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft, delay:d});
-    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9', delay:d}});
+    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft});
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9'}});
 
 }
 //green = ececbb
@@ -105,8 +103,6 @@ function swipeRight(e) {
 
     x = "+=" + offset + "px";
 
-
-
     TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
     TweenMax.to($('body'), t1, {css:{'backgroundColor':'#ececbb'}})
 }
@@ -126,9 +122,10 @@ function onNameGoneLeft() {
     popName();
     showNextName();
     var t2 = .3;
+    var d = .2;
     TweenMax.set($('#name'), {x:"+=" + offset + "px"});
-    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2'}});
-    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2', delay:d}});
+    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown, delay:d});
 
 
 }
