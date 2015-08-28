@@ -5,6 +5,9 @@ html, body {
   margin: 0;
   background-color: #fee9d2; }
 
+body {
+  overflow-x: hidden; }
+
 .container-fluid {
   margin-left: 0;
   margin-right: 0;
@@ -90,6 +93,14 @@ html, body {
       display: table-cell;
       text-align: center;
       vertical-align: middle; }
+    .section.name #name {
+      position: relative;
+      height: 100px; }
+      .section.name #name div {
+        position: absolute;
+        left: 50%;
+        width: 500px;
+        margin-left: -250px; }
   .section.matchesList h2 {
     position: relative;
     font-size: 3em;

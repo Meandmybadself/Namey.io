@@ -56,22 +56,61 @@ function swipeLeft() {
     if ($('matchesList').hasClass('active')) {
         return;
     }
-    popName();
-    showNextName();
+
+    var t1 = .3;
+
+    TweenMax.to($('#name'), t1, {x:"-=15%", opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft});
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9'}})
+
 }
+//green = ececbb
+//red = ff7f81
 
 function swipeRight() {
     if ($('matchesList').hasClass('active')) {
         return;
     }
+
+    if (isLocked) {
+        return;
+    }
+    isLocked = true;
+
     $.post("vote/",
         {'uid':window.uid, 'name':window.currentName},
         updateCount,
         "json"
     ).error(onError);
 
+    var t1 = .3;
+
+    TweenMax.to($('#name'), t1, {x:"+=15%", opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#ececbb'}})
+}
+function onNameGoneRight() {
     popName();
     showNextName();
+    var t2 = .3;
+    TweenMax.set($('#name'), {x:"-=15%"});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2'}});
+    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown});
+
+
+}
+
+function onNameGoneLeft() {
+    popName();
+    showNextName();
+    var t2 = .3;
+    TweenMax.set($('#name'), {x:"+=15%"});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2'}});
+    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown});
+
+
+}
+
+function onNameShown() {
+    isLocked = false;
 }
 
 function showMatches() {
@@ -172,6 +211,7 @@ function setUser(uid) {
 }
 
 function onNamesLoaded(data,status) {
+    console.log('onNamesLoaded', data.length);
     //Shuffle it up upon initial load.
     var names = shuffle(data);
     //Stow that shit away in ls.

@@ -5,6 +5,9 @@ html,body {
     margin:0;
     background-color:lighten(#FAB260, 23);
 }
+body {
+    overflow-x:hidden;
+}
 .container-fluid {
     margin-left:0;
     margin-right:0;
@@ -96,7 +99,6 @@ html,body {
     }
 
     .content {
-        //border:1px solid #FF0000;
         display:block;
         height:100%;
     }
@@ -111,6 +113,16 @@ html,body {
             display:table-cell;
             text-align:center;
             vertical-align:middle;
+        }
+        #name {
+            position:relative;
+            height:100px;
+            div {
+                position:absolute;
+                left:50%;
+                width:500px;
+                margin-left:-250px;
+            }
         }
     }
     &.matchesList {
