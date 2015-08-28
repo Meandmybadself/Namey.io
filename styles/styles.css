@@ -44,7 +44,8 @@ body {
     font-family: "Chronicle Display A", "Chronicle Display B";
     font-style: normal;
     font-weight: 300;
-    font-size: 1.15em; }
+    font-size: 1.15em;
+    text-align: center; }
   .section .circle {
     box-shadow: 0 0 0 2px #888, 0 0 0 8px #333;
     display: table;
