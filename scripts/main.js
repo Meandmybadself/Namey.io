@@ -52,28 +52,37 @@ function popName() {
     localStorage.setItem(window.uid,JSON.stringify(names));
 }
 
-function swipeLeft() {
+function swipeLeft(e) {
     if ($('matchesList').hasClass('active')) {
         return;
     }
 
-    console.log('swipeLeft', arguments);
+    console.log('swipeLeft ', arguments);
 
-    var t1 = .3;
+    var t1   = .3;
+    offset   = 150 * t1;
 
-    TweenMax.to($('#name'), t1, {x:"-=15%", opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft});
-    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9'}})
+    if (e && e.velocityX) {
+        offset = (e.velocityX * 100 * t1);
+    }
+
+    x = "-=" + offset + "px";
+
+    var d = .2;
+
+    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLef, delay:dt});
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9', delay:d}});
 
 }
 //green = ececbb
 //red = ff7f81
 
-function swipeRight() {
+var offset;
+
+function swipeRight(e) {
     if ($('matchesList').hasClass('active')) {
         return;
     }
-
-    console.log('swipeRight', arguments);
 
     if (isLocked) {
         return;
@@ -86,18 +95,29 @@ function swipeRight() {
         "json"
     ).error(onError);
 
-    var t1 = .3;
 
-    TweenMax.to($('#name'), t1, {x:"+=15%", opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
+    var t1   = .3;
+    offset   = 150 * t1;
+
+    if (e && e.velocityX) {
+        offset = (e.velocityX * 100 * t1);
+    }
+
+    x = "+=" + offset + "px";
+
+
+
+    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
     TweenMax.to($('body'), t1, {css:{'backgroundColor':'#ececbb'}})
 }
 function onNameGoneRight() {
     popName();
     showNextName();
     var t2 = .3;
-    TweenMax.set($('#name'), {x:"-=15%"});
-    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2'}});
-    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown});
+    var d = .2;
+    TweenMax.set($('#name'), {x:"-=" + offset + "px"});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2', delay:d}});
+    TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown, delay:d});
 
 
 }
@@ -106,7 +126,7 @@ function onNameGoneLeft() {
     popName();
     showNextName();
     var t2 = .3;
-    TweenMax.set($('#name'), {x:"+=15%"});
+    TweenMax.set($('#name'), {x:"+=" + offset + "px"});
     TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2'}});
     TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown});
 
