@@ -102,7 +102,7 @@ function swipeRight(e) {
         offset = (e.velocityX * 100 * t1);
     }
 
-    x = "+=" + offset + "px";
+    x = "-=" + offset + "px";
 
     TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
     TweenMax.to($('body'), t1, {css:{'backgroundColor':'#ececbb'}})
