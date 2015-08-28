@@ -57,6 +57,8 @@ function swipeLeft() {
         return;
     }
 
+    console.log('swipeLeft', arguments);
+
     var t1 = .3;
 
     TweenMax.to($('#name'), t1, {x:"-=15%", opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft});
@@ -70,6 +72,8 @@ function swipeRight() {
     if ($('matchesList').hasClass('active')) {
         return;
     }
+
+    console.log('swipeRight', arguments);
 
     if (isLocked) {
         return;
