@@ -63,7 +63,7 @@ function swipeLeft(e) {
     offset   = 150 * t1;
 
     if (e && e.velocityX) {
-        offset = (e.velocityX * 100 * t1);
+        offset = (e.velocityX * 150 * t1);
     }
 
     x = "-=" + offset + "px";
@@ -97,9 +97,8 @@ function swipeRight(e) {
     var t1   = .3;
     offset   = 150 * t1;
 
-    console.log(e);
     if (e && e.velocityX) {
-        offset = (e.velocityX * 100 * t1);
+        offset = (e.velocityX * 150 * t1);
     }
 
     x = "-=" + offset + "px";
