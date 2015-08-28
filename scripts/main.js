@@ -112,7 +112,7 @@ function onNameGoneRight() {
     showNextName();
     var t2 = .3;
     var d = .2;
-    TweenMax.set($('#name'), {x:"-=" + offset + "px"});
+    TweenMax.set($('#name'), {x:"+=" + offset + "px"});
     TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2', delay:d}});
     TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown, delay:d});
 
