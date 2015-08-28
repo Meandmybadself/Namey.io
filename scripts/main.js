@@ -66,7 +66,7 @@ function swipeLeft(e) {
         offset = (e.velocityX * 100 * t1);
     }
 
-    x = "-=" + offset + "px";
+    x = "+=" + offset + "px";
 
     var d = .2;
 
