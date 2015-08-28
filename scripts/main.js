@@ -66,11 +66,11 @@ function swipeLeft(e) {
         offset = (e.velocityX * 100 * t1);
     }
 
-    x = "+=" + offset + "px";
+    x = "-=" + offset + "px";
 
     var d = .2;
 
-    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLef, delay:dt});
+    TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft, delay:d});
     TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9', delay:d}});
 
 }
