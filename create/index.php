@@ -9,11 +9,11 @@
 
         $email  = $_POST['email'];
 
-        $interactionURL = "http://" . $_SERVER['HTTP_HOST'] . "/#/uid/" . $uid;
-        $msg = "Find a name for your baby at:\n$interactionURL";
+        $interactionURL = "http://" . $_SERVER['HTTP_HOST'] . "/app/#/uid/" . $uid;
+        $msg = "Your co-parent thought you could find a name for your baby at:\n$interactionURL";
 
         //header("Content-type:application/javascript");
-        if (mail($email, "Find a baby name.", $msg)) {
+        if (mail($email, "Find a baby name with Namey", $msg)) {
             echo json_encode(array("stat"=>"ok"), JSON_PRETTY_PRINT);
         } else {
             echo json_encode(array("stat"=>"err"), JSON_PRETTY_PRINT);

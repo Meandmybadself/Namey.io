@@ -2,11 +2,65 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 0;
-  margin: 0;
-  background-color: #fee9d2; }
+  margin: 0; }
 
 body {
   overflow-x: hidden; }
+
+div#header {
+  background: #ffffff;
+  border-bottom: 1px solid #DDD;
+  font-family: "Chronicle Display A", "Chronicle Display B", Helvetica, Arial;
+  font-style: normal;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #DE3C2A;
+  padding: 0;
+  transition: height .3s ease-out;
+  overflow: hidden;
+  height: 40px;
+  font-family: "Whitney A", "Whitney B";
+  font-style: normal;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: .8em; }
+  div#header div {
+    color: #FFF;
+    padding: 5px 0; }
+  div#header hr {
+    margin: 0; }
+  div#header .site-name {
+    color: #de3c2a;
+    text-transform: uppercase;
+    padding-left: 2px; }
+    div#header .site-name i {
+      margin-right: 5px; }
+  div#header div.bottom {
+    background-color: #FFF; }
+    div#header div.bottom ul {
+      margin-top: 6px;
+      text-align: center;
+      padding: 0; }
+      div#header div.bottom ul li {
+        display: inline-block;
+        text-align: center; }
+        div#header div.bottom ul li:nth-child(1) {
+          margin-right: 50px; }
+        div#header div.bottom ul li:nth-child(2) {
+          margin-right: 60px; }
+        div#header div.bottom ul li:nth-child(3) {
+          margin-right: 10px; }
+        div#header div.bottom ul li a {
+          font-size: 1.1em;
+          color: #222;
+          font-weight: 600; }
+          div#header div.bottom ul li a:hover, div#header div.bottom ul li a:active, div#header div.bottom ul li a:focus {
+            text-decoration: none; }
+          div#header div.bottom ul li a.active {
+            color: #de3c2a; }
 
 .container-fluid {
   margin-left: 0;
@@ -26,7 +80,7 @@ body {
   .section hr {
     height: 0;
     border-top: 1px solid #fcca91;
-    width: 60%;
+    width: 80%;
     margin-top: 10px;
     margin-bottom: 10px;
     position: relative; }
@@ -34,41 +88,83 @@ body {
     position: relative;
     font-size: 4.5em;
     text-align: center;
-    margin-top: 80px;
+    margin-top: 30px;
     font-family: "Chronicle Display A", "Chronicle Display B";
     font-style: normal;
-    font-weight: 800;
-    margin-bottom: 40px; }
-  .section input, .section button, .section p, .section label {
+    font-weight: 800; }
+  .section button {
+    font-family: "Whitney A", "Whitney B";
+    font-style: normal;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.15em;
+    text-align: center;
+    margin-top: 20px;
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.1); }
+  .section p.subhead {
+    margin-bottom: 30px; }
+  .section input {
+    margin-bottom: 30px; }
+  .section input, .section p, .section label {
     position: relative;
-    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-family: "Whitney A", "Whitney B";
     font-style: normal;
     font-weight: 300;
-    font-size: 1.15em;
+    font-size: 1em;
     text-align: center; }
+  .section p.instructions {
+    font-family: "Whitney A", "Whitney B";
+    font-style: normal;
+    font-size: 1em;
+    margin-bottom: 100px; }
+    .section p.instructions .red {
+      color: #de3c2a; }
+    .section p.instructions .green {
+      color: #00cc00; }
   .section .circle {
-    box-shadow: 0 0 0 2px #888, 0 0 0 8px #333;
-    display: table;
+    box-shadow: 0 0 0 1px #888;
+    display: block;
     width: 100px;
     height: 100px;
-    background-color: #333;
     border-radius: 50%;
     position: absolute;
-    bottom: 100px;
+    bottom: 80px;
     left: 50%;
-    margin-left: -50px; }
+    margin-left: -50px;
+    font-family: "Whitney A", "Whitney B"; }
     .section .circle.close-btn {
       width: 50px;
       height: 50px;
       left: 95%;
-      bottom: 20px; }
+      bottom: 20px;
+      background-color: #333;
+      border: none;
+      box-shadow: none; }
+      .section .circle.close-btn .value {
+        margin-top: 8px;
+        color: #FFF; }
     .section .circle .value {
-      display: table-cell;
+      display: block;
       text-align: center;
       vertical-align: middle;
-      color: #FFF;
-      font-family: "Chronicle Display A", "Chronicle Display B";
-      font-style: normal; }
+      color: #000;
+      font-style: normal;
+      margin-top: 18px;
+      font-size: 1.8em;
+      margin-bottom: 0px;
+      font-weight: 800; }
+    .section .circle .label {
+      color: #333;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-top: 15px;
+      font-size: 1em; }
+    .section .circle.active {
+      background-color: #00cc00;
+      box-shadow: 0 0 0 1px #00b300; }
+      .section .circle.active .value, .section .circle.active .label {
+        color: #FFF; }
   .section #footer {
     position: absolute;
     bottom: 0;
@@ -77,13 +173,21 @@ body {
     background: #333;
     color: #fff;
     text-align: center;
-    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-family: "Whitney A", "Whitney B";
     font-style: normal;
     padding: 5px;
-    padding-bottom: 20px; }
+    padding-bottom: 20px;
+    z-index: 2; }
   .section .content {
     display: block;
     height: 100%; }
+    .section .content .centered-content-holder {
+      width: 100%;
+      height: 100%;
+      display: table; }
+      .section .content .centered-content-holder .centered-content {
+        display: table-cell;
+        vertical-align: middle; }
   .section.name {
     position: relative; }
     .section.name.active {
@@ -94,14 +198,54 @@ body {
       display: table-cell;
       text-align: center;
       vertical-align: middle; }
-    .section.name #name {
+    .section.name h1#name {
       position: relative;
-      height: 100px; }
-      .section.name #name div {
+      height: 60px;
+      margin-top: 0;
+      margin-bottom: 30px;
+      color: #333; }
+      .section.name h1#name div {
         position: absolute;
         left: 50%;
         width: 500px;
         margin-left: -250px; }
+  .section.yourMatchesList h2 {
+    position: relative;
+    font-size: 3em;
+    text-align: center;
+    margin-top: 80px;
+    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-style: normal;
+    font-weight: 800;
+    margin-bottom: 30px; }
+  .section.yourMatchesList ul#matches {
+    list-style: none;
+    padding-left: 0; }
+    .section.yourMatchesList ul#matches li {
+      position: relative;
+      font-family: "Chronicle Display A", "Chronicle Display B";
+      font-style: normal;
+      font-weight: 300;
+      font-size: 1.4em;
+      text-align: center; }
+  .section.about h2 {
+    position: relative;
+    font-size: 3em;
+    text-align: center;
+    margin-top: 80px;
+    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-style: normal;
+    font-weight: 800;
+    margin-bottom: 30px; }
+  .section.about p {
+    font-family: "Chronicle Display A", "Chronicle Display B";
+    font-style: normal;
+    font-weight: 300;
+    font-size: 1.2em; }
+    .section.about p.text-left {
+      color: #de3c2a; }
+    .section.about p.text-right {
+      color: #00b300; }
   .section.matchesList h2 {
     position: relative;
     font-size: 3em;

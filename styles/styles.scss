@@ -1,12 +1,91 @@
+$red:#DE3C2A;
+$green:darken(#00FF00, 10);
 html,body {
     width:100%;
     height:100%;
     padding:0;
     margin:0;
-    background-color:lighten(#FAB260, 23);
+
 }
 body {
     overflow-x:hidden;
+}
+
+div#header {
+    background: #ffffff;
+    border-bottom:1px solid #DDD;
+    font-family: "Chronicle Display A", "Chronicle Display B", Helvetica, Arial;
+    font-style: normal;
+    position:fixed;
+    z-index:2;
+    top:0;
+    left:0;
+    width:100%;
+    color:#DE3C2A;
+    padding:0;
+
+    div {
+        color:#FFF;
+        padding:5px 0;
+    }
+
+    hr {
+        margin:0;
+    }
+    transition:height .3s ease-out;
+    overflow:hidden;
+    height:40px;
+
+    font-family: "Whitney A", "Whitney B";
+    font-style: normal;
+    font-weight: 600;
+    text-transform:uppercase;
+    font-size:.8em;
+
+    .site-name {
+        color:$red;
+        text-transform:uppercase;
+        padding-left:2px;
+        i {
+            margin-right:5px;
+        }
+    }
+
+    div.bottom {
+        background-color:#FFF;
+        ul {
+            margin-top:6px;
+            text-align:center;
+            padding:0;
+
+            li {
+                &:nth-child(1) {
+                    margin-right:50px;
+                }
+                &:nth-child(2) {
+                    margin-right:60px;
+                }
+                &:nth-child(3) {
+                    margin-right:10px;
+                }
+
+                display:inline-block;
+                text-align: center;
+                a {
+                    font-size:1.1em;
+                    color:#222;
+                    font-weight:600;
+                    &:hover, &:active, &:focus {
+                        text-decoration:none;
+                    }
+                    &.active {
+                        color:$red;
+                    }
+                }
+            }
+        }
+
+    }
 }
 .container-fluid {
     margin-left:0;
@@ -16,12 +95,15 @@ body {
     height:100%;
 }
 
+
+
 .section {
     width:100%;
     height:100%;
     position:relative;
     display:none;
     margin:0;
+
 
     &.active {
         display:block;
@@ -30,7 +112,7 @@ body {
     hr {
         height:0;
         border-top:1px solid lighten(#FAB260, 10);
-        width:60%;
+        width:80%;
         margin-top:10px;
         margin-bottom:10px;
         position:relative;
@@ -40,47 +122,107 @@ body {
         position:relative;
         font-size:4.5em;
         text-align:center;
-        margin-top:80px;
+        margin-top:30px;
         font-family: "Chronicle Display A", "Chronicle Display B";
         font-style: normal;
         font-weight: 800;
-        margin-bottom:40px;
+        //margin-bottom:60px;
+        //text-shadow: 3px 3px 0px rgba(0,0,0,.1);
     }
-    input, button, p, label {
-        position:relative;
-        font-family: "Chronicle Display A", "Chronicle Display B";
+
+    button {
+        font-family: "Whitney A", "Whitney B";
         font-style: normal;
-        font-weight: 300;
+        font-weight: 600;
+        text-transform:uppercase;
         font-size:1.15em;
         text-align:center;
+        margin-top:20px;
+        text-shadow: 2px 2px 1px rgba(0,0,0,.2);
+        box-shadow:3px 3px 0px 0px rgba(0,0,0,.1);
+    }
+
+    p.subhead {
+        margin-bottom:30px;
+        a {}
+    }
+
+    input {
+        margin-bottom:30px;
+    }
+    input, p, label {
+        position:relative;
+        font-family: "Whitney A", "Whitney B";
+        font-style: normal;
+        font-weight: 300;
+        font-size:1em;
+        text-align:center;
+    }
+
+
+
+    p.instructions {
+        font-family: "Whitney A", "Whitney B";
+        font-style: normal;
+        font-size:1em;
+        margin-bottom:100px;
+        .red {
+            color:$red;
+        }
+        .green {
+            color:$green;
+        }
     }
 
     .circle {
         box-shadow:
-        0 0 0 2px #888,
-        0 0 0 8px #333;
-        display:table;
+        0 0 0 1px #888;
+        display:block;
         width:100px;
         height:100px;
-        background-color:#333;
         border-radius:50%;
         position:absolute;
-        bottom:100px;
+        bottom:80px;
         left:50%;
         margin-left:-50px;
+        font-family: "Whitney A", "Whitney B";
         &.close-btn {
             width:50px;
             height:50px;
             left:95%;
             bottom:20px;
+            background-color:#333;
+            border:none;
+            box-shadow:none;
+            .value {
+                margin-top:8px;
+                color:#FFF;
+            }
         }
         .value {
-            display:table-cell;
+            display:block;
             text-align:center;
             vertical-align: middle;
-            color:#FFF;
-            font-family: "Chronicle Display A", "Chronicle Display B";
+            color:#000;
             font-style: normal;
+            margin-top:18px;
+            font-size:1.8em;
+            margin-bottom:0px;
+            font-weight:800;
+        }
+        .label {
+            color:#333;
+            font-weight:500;
+            text-transform:uppercase;
+            margin-top:15px;
+            font-size:1em;
+        }
+        &.active {
+            background-color:$green;
+            box-shadow:0 0 0 1px darken($green,5);
+            .value,.label {
+                color:#FFF;
+            }
         }
     }
 
@@ -92,16 +234,26 @@ body {
         background:#333;
         color:#fff;
         text-align:center;
-        font-family: "Chronicle Display A", "Chronicle Display B";
+        font-family: "Whitney A", "Whitney B";
         font-style: normal;
         padding:5px;
-        padding-bottom:20px
-
+        padding-bottom:20px;
+        z-index:2;
+        //height:80%;
     }
 
     .content {
         display:block;
         height:100%;
+        .centered-content-holder {
+            width:100%;
+            height:100%;
+            display:table;
+            .centered-content {
+                 display:table-cell;
+                vertical-align: middle;
+            }
+        }
     }
     &.name {
         position:relative;
@@ -115,17 +267,73 @@ body {
             text-align:center;
             vertical-align:middle;
         }
-        #name {
+        h1#name {
             position:relative;
-            height:100px;
+            height:60px;
+            margin-top:0;
+            margin-bottom:30px;
+            color:#333;
             div {
                 position:absolute;
                 left:50%;
                 width:500px;
                 margin-left:-250px;
+
             }
         }
     }
+
+    &.yourMatchesList {
+        h2 {
+            position:relative;
+            font-size:3em;
+            text-align:center;
+            margin-top:80px;
+            font-family: "Chronicle Display A", "Chronicle Display B";
+            font-style: normal;
+            font-weight: 800;
+            margin-bottom:30px;
+        }
+        ul#matches {
+            list-style:none;
+            padding-left:0;
+            li {
+                position:relative;
+                font-family: "Chronicle Display A", "Chronicle Display B";
+                font-style: normal;
+                font-weight: 300;
+                font-size:1.4em;
+                text-align:center;
+            }
+        }
+    }
+
+    &.about {
+        h2 {
+            position:relative;
+            font-size:3em;
+            text-align:center;
+            margin-top:80px;
+            font-family: "Chronicle Display A", "Chronicle Display B";
+            font-style: normal;
+            font-weight: 800;
+            margin-bottom:30px;
+        }
+        p {
+            font-family: "Chronicle Display A", "Chronicle Display B";
+            font-style: normal;
+            font-weight: 300;
+            font-size:1.2em;
+            &.text-left {
+                color:$red;
+            }
+            &.text-right {
+                color:darken(#00FF00, 15);
+            }
+        }
+
+    }
+
     &.matchesList {
         h2 {
             position:relative;

@@ -1,0 +1,116 @@
+$red:#DE3C2A;
+$green:darken(#00FF00, 10);
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+h1 {
+    font-family: "Chronicle Display A", "Chronicle Display B", Helvetica, Arial;
+    font-weight:800;
+    font-size:4em;
+    margin-top:100px;
+    margin-bottom:20px;
+}
+
+p {
+    font-family: "Whitney A", "Whitney B";
+    font-style: normal;
+    font-weight: 100;
+}
+
+dl {
+    dd {
+        font-family: "Chronicle Display A", "Chronicle Display B", Helvetica, Arial;
+        font-weight:800;
+        font-size:4em;
+        margin-top:10px;
+    }
+    dt {
+        font-family: "Whitney A", "Whitney B";
+        font-style: normal;
+        font-weight: 100;
+    }
+    div.email {
+        border:1px solid #888;
+        width:140px;
+        position:absolute;
+        z-index:2;
+        height:25px;
+        top:120px;
+        left:20px;
+        border-radius:4px;
+        font-family: "Whitney A", "Whitney B";
+        font-weight:600;
+        font-size:13px;
+        padding-top:3px;
+    }
+    dd.phone {
+        background-color:#222;
+        width:180px;
+        height:350px;
+        border-radius:10px;
+        margin:20px auto;
+        position:relative;
+        div.color {
+            position:absolute;
+            z-index:2;
+            width:172px;
+            height:256px;
+            top:47px;
+            left:4px;
+            opacity:0;
+            &.red {
+                background-color:$red;
+            }
+            &.green {
+                background-color:$green;
+            }
+        }
+        div.name {
+            position:absolute;
+            width:172px;
+            height:45px;
+            left:4px;
+            top:100px;
+            overflow:hidden;
+            font-size:30px;
+            z-index:1;
+        }
+        img {
+            width:172px;
+            height:auto;
+            margin-top:30px;
+            &.matches {
+                opacity:0;
+                position:absolute;
+                z-index:2;
+                bottom:63px;
+                left:65px;
+                width:50px;
+                height:50px;
+                margin:0;
+            }
+        }
+    }
+}
+html.no-touch {
+    .row.cta {
+        display:none;
+        // a.btn.btn-success.btn-lg {
+        //     //background-color:#00FF00 !important;
+        // }
+    }
+}
+.footer {
+    font-family: "Whitney A", "Whitney B";
+    font-style: normal;
+    font-weight: 100;
+    margin-bottom:50px;
+    a {
+        color:#FF0000;
+    }
+}

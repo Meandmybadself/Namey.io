@@ -8,7 +8,7 @@ function createUser(email, gender) {
     var uid = h.encode(int) + '-' + email + '-' + gender + '-0';
     window.uid = uid;
     //send an email to the co-parent.
-    $.post("create/",
+    $.post("/create/",
         {'uid':uid, 'email':$('#email').val()},
         onUserCreated,
         "json"
@@ -16,18 +16,19 @@ function createUser(email, gender) {
 }
 
 function onError() {
-    console.log('onError', arguments);
     alert("Something's broken.");
+    $('#createUser').removeClass('disabled');
    // alert('duh...');
 }
 
 function onUserCreated() {
     setUser(window.uid);
+
 }
 
 
 function onTap(e) {
-    if ($('matchesList').hasClass('active')) {
+    if (window.currentSectionId != 'name') {
         return;
     }
     if (e.srcEvent.target.className == "value") {
@@ -53,11 +54,11 @@ function popName() {
 }
 
 function swipeLeft(e) {
-    if ($('matchesList').hasClass('active')) {
+    if (window.currentSectionId != 'name') {
         return;
     }
 
-    console.log('swipeLeft ', e);
+    //console.log('swipeLeft ', e);
 
     var t1   = .3;
     offset   = 150 * t1;
@@ -69,16 +70,14 @@ function swipeLeft(e) {
     x = "-=" + offset + "px";
 
     TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneLeft});
-    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#FFDEC9'}});
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#febbbe'}});
 
 }
-//green = ececbb
-//red = ff7f81
 
 var offset;
 
 function swipeRight(e) {
-    if ($('matchesList').hasClass('active')) {
+    if (window.currentSectionId != 'name') {
         return;
     }
 
@@ -87,12 +86,13 @@ function swipeRight(e) {
     }
     isLocked = true;
 
-    $.post("vote/",
+    $.post("/vote/",
         {'uid':window.uid, 'name':window.currentName},
         updateCount,
         "json"
     ).error(onError);
 
+    addMatchingName(window.currentName);
 
     var t1   = .3;
     offset   = 150 * t1;
@@ -104,7 +104,7 @@ function swipeRight(e) {
     x = "-=" + offset + "px";
 
     TweenMax.to($('#name'), t1, {x:x, opacity:0, ease:Quad.easeOut, onComplete:onNameGoneRight});
-    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#ececbb'}})
+    TweenMax.to($('body'), t1, {css:{'backgroundColor':'#d1efd2'}})
 }
 function onNameGoneRight() {
     popName();
@@ -112,7 +112,7 @@ function onNameGoneRight() {
     var t2 = .3;
     var d = .2;
     TweenMax.set($('#name'), {x:"+=" + offset + "px"});
-    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2', delay:d}});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#FFFFFF', delay:d}});
     TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown, delay:d});
 
 
@@ -124,7 +124,7 @@ function onNameGoneLeft() {
     var t2 = .3;
     var d = .2;
     TweenMax.set($('#name'), {x:"+=" + offset + "px"});
-    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#fee9d2', delay:d}});
+    TweenMax.to($('body'), t2, {css:{'backgroundColor':'#FFFFFF', delay:d}});
     TweenMax.to($('#name'), t2, {opacity:1, ease:Quad.easeOut, onComplete:onNameShown, delay:d});
 
 
@@ -135,7 +135,7 @@ function onNameShown() {
 }
 
 function showMatches() {
-    $.post('vote/',
+    $.post('/vote/',
         {'uid':window.uid,'list':1},
         onMatchesLoaded,
         "json").error(onError);
@@ -147,16 +147,11 @@ function onMatchesLoaded(data) {
         var li = $('<li>'+data[i]+'</li>');
         $('#matches').append(li);
     }
-    $('.name').hide();
-    $('.matchesList').show();
-    $('#close-matches').on(ch, closeShowMatches);
+    showSection('matchesList');
+    $('#close-matches').on(ch, onCloseClick);
 }
 
-function closeShowMatches() {
-    $('.name').show();
-    $('.matchesList').hide();
-    $('#close-matches').off(ch, closeShowMatches);
-}
+
 
 function updateCount(data) {
     if (data.matches) {
@@ -165,9 +160,9 @@ function updateCount(data) {
             $('#matchCountContainer').on(ch, showMatches);
         }
         if (data.matches == 1) {
-            var t = "1 match";
+            var t = "1";
         } else {
-            var t = data.matches + " matches";
+            var t = data.matches;
         }
         $('#matchCount').text(t);
      }
@@ -191,19 +186,22 @@ function getUser() {
 }
 
 function setUser(uid) {
-    $('.login').hide();
-
+    $('.login').removeClass('active');
     //Set up Hammer.
-    window.h = new Hammer(document.getElementById('main'));
-   // if ($('html').hasClass('touch')) {
+    window.h = new Hammer(document.body, {
+        recognizers: [
+            [Hammer.Swipe, {direction: Hammer.DIRECTION_HORIZONTAL, velocity:.2, threshold:1}]
+        ]
+    });
+    if ($('html').hasClass('touch')) {
        // console.log('touch-mode');
-        window.h.get('swipe').set({direction:Hammer.DIRECTION_HORIZONTAL});
+        //window.h.get('swipe').set({direction:Hammer.DIRECTION_HORIZONTAL});
         window.h.on('swipeleft', swipeLeft);
         window.h.on('swiperight', swipeRight);
-    //} else {
-     //   console.log('tap-mode');
+    } else {
+        console.log('tap-mode');
         window.h.on('tap', onTap);
-   // }
+    }
 
     window.uid = uid;
 
@@ -215,7 +213,7 @@ function setUser(uid) {
         showNextName();
 
         //Update match count.;
-        $.post("vote/", {'uid':window.uid}, updateCount, "json");
+        $.post("/vote/", {'uid':window.uid}, updateCount, "json");
 
     } else {
 
@@ -225,16 +223,77 @@ function setUser(uid) {
         uidParts.pop();
         window.gender   = uidParts.pop();
 
+        createCookie('hasStarted',1,9999);
+
         localStorage.setItem("id", uid);
+        //Create an empty matches array.
+        localStorage.setItem("likes", JSON.stringify([]));
         //load gender data.
-        $.getJSON("data/" + gender + ".json").success(onNamesLoaded);
+        $.getJSON("/data/" + gender + ".json").success(onNamesLoaded);
     }
+}
+
+function createCookie(name,value,days) {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function eraseCookie(name) {
+    createCookie(name,"",-1);
+}
+
+function addMatchingName(name) {
+    var data = localStorage.getItem('likes');
+    if (data) {
+        data = JSON.parse(data);
+    } else {
+        //This should never happen...
+        data = [];
+    }
+
+    data.push(name);
+
+    localStorage.setItem('likes', JSON.stringify(data));
+}
+
+function removeMatchingName(name) {
+    var data = localStorage.getItem('likes');
+    if (data) {
+        data = JSON.parse(data);
+    } else {
+        //This should never happen...
+        data = [];
+    }
+    var index = data.indexOf(name);
+    if (data > -1) {
+        data.splice(index,1);
+    }
+    localStorage.setItem('likes', JSON.stringify(data));
 }
 
 function onNamesLoaded(data,status) {
     console.log('onNamesLoaded', data.length);
     //Shuffle it up upon initial load.
-    var names = shuffle(data);
+    //var names = shuffle(data);
+    //On second thought, don't.  If the name of the game is to help them find matches, show them both
+    //the same names in the same order.
+    names = data;
     //Stow that shit away in ls.
     localStorage.setItem(window.uid, JSON.stringify(names));
 
@@ -244,11 +303,13 @@ function onNamesLoaded(data,status) {
 
 function showNextName() {
     var names = $.parseJSON(localStorage.getItem(window.uid));
+    console.log(names.length + ' names')
 
     if (names && names.length) {
         window.currentName = names[0];
 
-        $('.section.name').show();
+        //$('.section.name').show();
+        this.showSection('name');
         $('#name').text(window.currentName);
     }
 }
@@ -269,6 +330,108 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+
+function onNamesClick() {
+    showSection('yourMatchesList');
+    var m = $('.yourMatchesList ul#matches');
+    m.empty();
+
+    var names = localStorage.getItem('likes');
+    if (names) {
+        names = JSON.parse(names);
+        if (names.length) {
+            for(var i=0; i < names.length; i++) {
+                var li = $("<li>"+names[i]+"</li>");
+                m.append(li);
+            }
+        } else {
+            var li = $("<li>You haven't liked any names yet.</li>");
+            m.append(li);
+        }
+    }
+}
+
+function onLogoutClick() {
+    if (confirm("You will lose all names.\nAre you sure?")) {
+        localStorage.clear();
+        eraseCookie('hasStarted');
+        updateCount({'matches':0});
+        window.uid = undefined;
+        isLocked = false;
+        $('#createUser').removeClass('disabled');
+        showLogin();
+    }
+}
+
+function onCloseClick() {
+    console.log('onCloseClick');
+    showSection('name');
+}
+
+function showSection(id) {
+    if (id == window.currentSectionId) {
+        return;
+    }
+    window.currentSectionId = id;
+    $('.section').hide();
+    $('#header ul li a').removeClass('active');
+    switch(id) {
+        case 'login':
+            $('.login').show();
+            $('#header').hide();
+        break;
+        case 'matchesList':
+            $('.matchesList').show();
+            $('#header').show();
+        break;
+        case 'about':
+            $('.about').show();
+            $('#header').show();
+            $("ul li a.btn-about").addClass('active');
+
+        break;
+        case 'yourMatchesList':
+            $('.yourMatchesList').show();
+            $('#header').show();
+            $("ul li a.btn-your-names").addClass('active');
+        break;
+        case 'name':
+            $('.name').show();
+            $('#header').show();
+        break;
+    }
+}
+
+function showLogin() {
+    this.showSection('login');
+    $('#create').submit(function(e) {
+        //stop being a form, form.
+        e.preventDefault();
+
+        if (isLocked) { return false; }
+
+        var email = $.trim($('#email').val());
+
+        if (email && email.indexOf('@') > 0 && email.indexOf('.') > 0) {
+            isLocked = true;
+            //Yank values from form.
+            var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
+            createUser(email, gender);
+        } else {
+            $('.login-email').addClass('has-error');
+            $('#email').focus();
+            return;
+        }
+
+    });
+
+    $('#email').focus();
+}
+
+function onAboutClick() {
+    showSection('about');
 }
 
 //click handler.
@@ -292,29 +455,14 @@ $(function() {
 
         location.hash = '';
     } else {
-        $('.login').show();
-        $('#create').submit(function(e) {
-            //stop being a form, form.
-            e.preventDefault();
-
-            if (isLocked) { return false; }
-
-            var email = $.trim($('#email').val());
-
-            if (email && email.indexOf('@') > 0 && email.indexOf('.') > 0) {
-                isLocked = true;
-                //Yank values from form.
-                var email = $('#email').val(), gender = $('input[name=gender]:checked').val();
-                createUser(email, gender);
-            } else {
-                $('.login-email').addClass('has-error');
-                $('#email').focus();
-                return;
-            }
-
-
-        });
-
-        $('#email').focus();
+        showLogin();
     }
+
+    $('#header .btn-your-names').on(ch, onNamesClick);
+    $('#header .btn-logout').on(ch, onLogoutClick);
+    $('#header .btn-about').on(ch, onAboutClick);
+
+    $('.close-btn').on(ch, onCloseClick);
+
+    //$('#header').on(ch, onHeaderClick);
 });
